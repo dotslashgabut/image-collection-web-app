@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+             <h2>My Collection</h2>
+             <div class="search-container">
+                 <input type="search" id="searchInput" placeholder="Search title or description...">
+             </div>
+             <div class="tag-list-container">
+                 <h3>Tags</h3>
+                 <ul id="tagList">
+                     <!-- Tags will be dynamically added here -->
+                     <li><span style="color: var(--on-surface-secondary); font-size: 0.85rem; background: none; border: none; cursor: default; padding: 0;">Loading tags...</span></li>
+                 </ul>
+             </div>
+             <button id="addItemBtn" class="add-button">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                     <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd" />
+                 </svg>
+                 Add New Item
+             </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div id="imageGrid" class="image-grid">
+                <!-- Placeholder text -->
+                 <p class="placeholder-text">Your collection is empty. Add some items!</p>
+                <!-- Image items will be dynamically added here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Item Modal -->
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modalTitle">Add New Image Item</h2>
+            <form id="addItemForm">
+                <input type="hidden" id="editItemId" value="">
+
+                <div class="form-group">
+                    <label for="itemImage">Image File:</label>
+                    <input type="file" id="itemImage" accept="image/*"> <!-- 'required' handled in JS -->
+                    <div class="modal-image-preview">
+                        <img id="modalPreviewImage" src="#" alt="Image Preview" style="display: none;">
+                        <span id="previewPlaceholder">Image Preview (2:3)</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="itemTitle">Title:</label>
+                    <input type="text" id="itemTitle" placeholder="Enter a title" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description:</label>
+                    <textarea id="itemDescription" placeholder="Enter a description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="itemTags">Tags:</label>
+                    <input type="text" id="itemTags" placeholder="e.g., nature, travel, abstract (comma-separated)">
+                </div>
+                <button type="submit" id="modalSubmitBtn" class="submit-button">Add Item</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Template for Grid Item -->
+    <template id="itemTemplate">
+        <div class="grid-item">
+            <div class="image-preview">
+                <img src="" alt="">
+            </div>
+            <div class="item-info">
+                <h4 class="item-title"></h4>
+                <p class="item-description"></p>
+                <div class="item-tags">
+                    <!-- Tag spans will be added here -->
+                </div>
+                 <!-- Action Buttons -->
+                 <button class="action-btn edit-btn" title="Edit Item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                      <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+                      <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+                    </svg>
+                 </button>
+                 <button class="action-btn delete-btn" title="Delete Item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                        <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.326.444C2.08 5.017 1 6.57 1 8.388v5.224c0 1.818 1.08 3.37 2.674 3.745 1.01.243 2.06.4 3.126.466v.431A2.75 2.75 0 1011.25 16v-.431c1.066-.066 2.116-.223 3.126-.466C15.92 14.757 17 13.357 17 11.5v-2c0-.059 0-.117-.002-.176a5.175 5.175 0 00-1.1-.356c-.348-.1-.704-.193-1.065-.28L14.75 8.5v-.112c0-1.818-1.08-3.37-2.674-3.745-.746-.223-1.531-.367-2.326-.444V3.75A2.75 2.75 0 008.75 1zM7.5 3.75A1.25 1.25 0 018.75 2.5h2.5A1.25 1.25 0 0112.5 3.75v.443c-.7-.066-1.413-.108-2.147-.108-.734 0-1.447.042-2.147.108V3.75zm-3.929 2.57C4.37 6.13 5.153 6 6 6h8c.847 0 1.63.13 2.429.32 1.014.24 1.821.9 2.226 1.734a.75.75 0 01-1.31.708 1.5 1.5 0 00-1.15-.562H6.803a1.5 1.5 0 00-1.15.563.75.75 0 01-1.31-.708c.405-.834 1.212-1.494 2.227-1.734z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>
