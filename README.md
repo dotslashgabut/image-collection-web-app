@@ -1,6 +1,6 @@
 # Image Collection Web App (Flat-File Backend)
 
-A modern, responsive web application for managing a personal image collection. It features image uploads, title/description/tag editing, search, tag filtering, and a clean user interface with animations. Data (metadata and image files) is stored directly on the server using a flat-file approach (JSON for metadata, files for images).
+A modern, responsive web application for managing a personal image collection. It features image uploads, title/description/tag editing, search, tag filtering, and a clean user interface with animations. Data (metadata and image files) is stored directly on the server using a flat-file approach (JSON for metadata, files for images). Maybe suitable for Midjourney --sref collections.
 
 <!-- Add a GIF or screenshot here -->
 
