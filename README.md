@@ -104,4 +104,4 @@ The frontend interacts with the backend via these endpoints:
 
 This project is licensed under the MIT License.
 
-The code generated using Gemini 2.5 Pro Experimental 03-25.
+Code generated using Gemini 2.5 Pro Experimental 03-25.
