@@ -65,13 +65,11 @@ img {
     flex-direction: column;
     overflow-y: auto; /* Allow sidebar scrolling */
     transition: width var(--transition-speed) var(--transition-timing);
-    flex-shrink: 0; /* Prevent sidebar from shrinking */
 }
 
 .sidebar h2 {
     color: var(--primary-color);
     margin-bottom: 25px;
-    text-align: center;
 }
 
 .content {
@@ -103,7 +101,6 @@ img {
 .tag-list-container {
     margin-bottom: 25px;
     flex-grow: 1; /* Takes up remaining space */
-    min-height: 50px; /* Ensure some space even when empty */
 }
 
 .tag-list-container h3 {
@@ -128,9 +125,8 @@ img {
     border-radius: 15px;
     font-size: 0.8rem;
     cursor: pointer;
-    transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed), border-color var(--transition-speed);
+    transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
     border: 1px solid var(--border-color);
-    user-select: none; /* Prevent text selection on click */
 }
 
 #tagList li span:hover {
@@ -189,7 +185,7 @@ img {
     transition: transform var(--transition-speed) var(--transition-timing), box-shadow var(--transition-speed) var(--transition-timing);
     opacity: 0; /* Start hidden for animation */
     animation: fadeIn 0.5s var(--transition-timing) forwards;
-    position: relative; /* For action buttons positioning */
+    position: relative; /* For delete button positioning */
 }
 
 @keyframes fadeIn {
@@ -197,7 +193,11 @@ img {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Stagger animation handled by JS */
+/* Stagger animation */
+.grid-item:nth-child(1) { animation-delay: 0.05s; }
+.grid-item:nth-child(2) { animation-delay: 0.1s; }
+.grid-item:nth-child(3) { animation-delay: 0.15s; }
+/* Add more if needed or handle dynamically in JS if order changes often */
 
 .grid-item:hover {
     transform: translateY(-5px) scale(1.02);
@@ -208,7 +208,23 @@ img {
     aspect-ratio: 2 / 3; /* The 2:3 ratio */
     background-color: var(--background-color); /* Placeholder bg */
     overflow: hidden;
+    position: relative; /* Needed if using padding trick fallback */
 }
+
+/* Fallback for browsers not supporting aspect-ratio */
+/* @supports not (aspect-ratio: 2 / 3) {
+    .image-preview {
+        height: 0;
+        padding-bottom: 150%;
+        position: relative;
+    }
+    .image-preview img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+    }
+} */
 
 .image-preview img {
     width: 100%;
@@ -223,8 +239,6 @@ img {
 
 .item-info {
     padding: 15px;
-    position: relative; /* Context for absolute positioned buttons */
-    padding-bottom: 10px; /* Ensure space below tags */
 }
 
 .item-title {
@@ -246,7 +260,7 @@ img {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: calc(1.6 * 0.85rem * 2); /* approx 2 lines height */
+    min-height: 2.5em; /* approx 2 lines */
 }
 
 .item-tags {
@@ -266,10 +280,10 @@ img {
     font-weight: 500;
 }
 
-/* Action Buttons (Edit/Delete) */
-.action-btn {
+.delete-btn {
     position: absolute;
     top: 10px;
+    right: 10px;
     background-color: rgba(40, 40, 40, 0.7);
     color: white;
     border: none;
@@ -282,52 +296,30 @@ img {
     align-items: center;
     justify-content: center;
     opacity: 0; /* Hidden by default */
-    transition: opacity var(--transition-speed), background-color var(--transition-speed), transform var(--transition-speed);
-    z-index: 5; /* Above image/info */
-    transform: translateY(-5px); /* Start slightly up */
+    transition: opacity var(--transition-speed), background-color var(--transition-speed);
+    z-index: 5; /* Above image */
 }
 
-.delete-btn {
-    right: 10px;
-}
-
-.edit-btn {
-    right: 48px; /* Position it to the left of the delete button */
-}
-
-/* Show buttons on grid item hover */
-.grid-item:hover .action-btn {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Individual button hover effects */
-.action-btn:hover {
-    transform: scale(1.1); /* Pop effect */
+.grid-item:hover .delete-btn {
+    opacity: 1; /* Show on hover */
 }
 
 .delete-btn:hover {
     background-color: var(--error-color);
 }
 
-.edit-btn:hover {
-    background-color: var(--primary-variant); /* Use a different color for edit hover */
-}
-
-.action-btn svg {
+.delete-btn svg {
     width: 16px;
     height: 16px;
 }
-
 
 .placeholder-text {
     color: var(--on-surface-secondary);
     font-style: italic;
     text-align: center;
-    width: 100%;
+    width: 100%; /* Span across grid */
     grid-column: 1 / -1; /* Span all columns */
     margin-top: 40px;
-    padding: 20px;
 }
 
 /* --- Modal --- */
@@ -404,17 +396,6 @@ img {
     color: var(--on-surface-secondary);
 }
 
-/* Style label differently when editing to show image is optional */
-.modal.editing .form-group label[for="itemImage"]::after {
-    content: " (optional, leave blank to keep current)";
-    font-style: italic;
-    font-weight: 300;
-    color: var(--on-surface-secondary);
-    font-size: 0.8em;
-    margin-left: 5px;
-}
-
-
 .form-group input[type="text"],
 .form-group input[type="file"],
 .form-group textarea {
@@ -481,7 +462,7 @@ img {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed), color var(--transition-speed);
+    transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
     display: block;
     width: 100%;
     margin-top: 10px;
@@ -496,15 +477,9 @@ img {
 
 /* --- Responsiveness --- */
 @media (max-width: 992px) {
-    .sidebar {
-        width: 220px; /* Slightly smaller sidebar */
-    }
     .image-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 20px;
-    }
-     .edit-btn {
-        right: 45px; /* Adjust spacing */
     }
 }
 
@@ -527,7 +502,6 @@ img {
 
     .sidebar h2 {
         text-align: center;
-        margin-bottom: 20px;
     }
 
     .add-button {
@@ -539,7 +513,6 @@ img {
 
      .tag-list-container {
         flex-grow: 0; /* Don't grow */
-        min-height: 40px;
     }
 
     .content {
@@ -553,25 +526,17 @@ img {
     }
 
     .item-title { font-size: 1rem; }
-    .item-description { font-size: 0.8rem; -webkit-line-clamp: 2; min-height: calc(1.6 * 0.8rem * 2);}
+    .item-description { font-size: 0.8rem; -webkit-line-clamp: 2; min-height: 2.4em;}
     .item-tags span { font-size: 0.7rem; }
 
     .modal-content {
         margin: 15% auto;
-        padding: 25px 20px;
+        padding: 20px;
         width: 95%;
     }
 
     .modal-image-preview {
         width: 120px;
-    }
-
-    .action-btn { /* Make slightly easier to tap */
-        width: 32px;
-        height: 32px;
-    }
-     .edit-btn {
-        right: 48px; /* Adjust spacing */
     }
 }
 
@@ -585,23 +550,14 @@ img {
         padding: 10px;
     }
 
-    .action-btn { /* Make easier to tap */
+    .delete-btn { /* Make easier to tap */
         width: 34px;
         height: 34px;
         top: 5px;
-    }
-    .delete-btn {
         right: 5px;
-    }
-    .edit-btn {
-        right: 44px; /* Adjust spacing */
     }
 
      .modal-content {
         margin: 10% auto;
-        padding: 20px 15px;
-    }
-    .form-group label[for="itemImage"]::after { /* Shorten optional text on mobile */
-        content: " (optional)";
     }
 }
