@@ -6,6 +6,8 @@ A modern, responsive web application for managing a personal image collection. I
 
 <!-- ![App Demo](link/to/your/demo.gif) -->
 
+![Image Collection Web App (Flat-File Backend)](screenshot.jpg)
+
 ## Features
 
 * **Add New Items:** Upload images, add titles, descriptions, and comma-separated tags.
